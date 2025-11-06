@@ -1,4 +1,5 @@
-export const tokenizer = (content: string) => {
-    const contentTokens = content.split(' ')
+export const tokenize = (content: string) => {
+    const delimiters = /[A-Za-z_]+|\d+|[^\s]/g
+    const contentTokens = content.match(delimiters)
     return contentTokens
 }
