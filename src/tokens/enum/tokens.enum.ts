@@ -5,6 +5,8 @@ export enum TokenTypeEnum {
 
     //Keywords
     PRINT = 'PRINT',
+    IF = 'IF',
+    FOR = 'FOR',
     
     //Operators
     ADD = 'ADD',
