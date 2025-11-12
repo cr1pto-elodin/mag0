@@ -1,4 +1,4 @@
-import { Token } from "../tokens/interface/token.interface";
+import { Token } from "../tokens/model/token.model";
 
 export class Parser {
     private tokens: Token[] = []
