@@ -1,3 +1,4 @@
+import { keyWords } from "./keywords/mapper/keyword.mapper"
 import { Token } from "./tokens/model/token.model"
 
 const delimiters = /[A-Za-z_]+|\d+|[^\s]/g
@@ -6,14 +7,25 @@ export const tokenizeSingleLine = (content: string) => {
     const contentTokens = content.match(delimiters)
 
     if (contentTokens === null) {
-        return ''
+        return []
     }
+
+    const tokens: Token[] = []
 
     for (const contentToken of contentTokens) {
-        const token = new Token({})
+        if(contentToken in keyWords){
+            const token = new Token({
+                type: keyWords[contentToken],
+                value: contentToken,
+                line: 0,
+                column: 0
+            })
+
+            tokens.push(token)
+        }
     }
 
-    return contentTokens
+    return tokens
 }
 
 export const tokenizeFile = (lines: string[]) => {
