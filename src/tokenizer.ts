@@ -3,7 +3,7 @@ import { Token } from "./tokens/model/token.model"
 
 const delimiters = /[A-Za-z_]+|\d+|[^\s]/g
 
-export const tokenizeSingleLine = (content: string) => {
+export const tokenizeSingleLine = (content: string, line: number) => {
     const contentTokens = content.match(delimiters)
 
     if (contentTokens === null) {
@@ -12,13 +12,13 @@ export const tokenizeSingleLine = (content: string) => {
 
     const tokens: Token[] = []
 
-    for (const contentToken of contentTokens) {
+    for (const [index,contentToken] of contentTokens.entries()) {
         if (contentToken in keyWords) {
             const token = new Token({
                 type: keyWords[contentToken],
                 value: contentToken,
-                line: 0,
-                column: 0
+                line: line,
+                column: index+1
             })
 
             tokens.push(token)
@@ -31,8 +31,8 @@ export const tokenizeSingleLine = (content: string) => {
 export const tokenizeFileContent = (lines: string[]) => {
     const tokenPerLines: Token[][] = []
 
-    for (const line of lines) {
-        const tokensInLine = tokenizeSingleLine(line)
+    for (const [i,line] of lines.entries()) {
+        const tokensInLine = tokenizeSingleLine(line,i+1)
         tokenPerLines.push(tokensInLine)
     }
 

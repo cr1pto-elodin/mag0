@@ -12,7 +12,7 @@ async function getInputLoop(rl: readline.promises.Interface) {
             break
         }
 
-        const tokens = tokenizeSingleLine(content)
+        const tokens = tokenizeSingleLine(content,1)
 
         console.log(tokens)
     }
