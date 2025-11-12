@@ -13,7 +13,7 @@ export const tokenizeSingleLine = (content: string) => {
     const tokens: Token[] = []
 
     for (const contentToken of contentTokens) {
-        if(contentToken in keyWords){
+        if (contentToken in keyWords) {
             const token = new Token({
                 type: keyWords[contentToken],
                 value: contentToken,
@@ -28,6 +28,13 @@ export const tokenizeSingleLine = (content: string) => {
     return tokens
 }
 
-export const tokenizeFile = (lines: string[]) => {
-    return []
+export const tokenizeFileContent = (lines: string[]) => {
+    const tokenPerLines: Token[][] = []
+
+    for (const line of lines) {
+        const tokensInLine = tokenizeSingleLine(line)
+        tokenPerLines.push(tokensInLine)
+    }
+
+    return tokenPerLines
 }
