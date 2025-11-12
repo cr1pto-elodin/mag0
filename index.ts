@@ -1,6 +1,6 @@
 import * as readline from 'readline'
 import { stdin as input, stdout as output} from 'process'
-import { tokenize } from './src/compiler';
+import { tokenizeSingleLine, tokenizeFile } from './src/tokenizer';
 import { getFileContentAsync } from './src/utils/files.utils';
 
 async function getInputLoop(rl: readline.promises.Interface) {
@@ -12,7 +12,7 @@ async function getInputLoop(rl: readline.promises.Interface) {
             break
         }
 
-        const tokens = tokenize(content)
+        const tokens = tokenizeSingleLine(content)
 
         console.log(tokens)
     }
@@ -21,9 +21,9 @@ async function getInputLoop(rl: readline.promises.Interface) {
 async function getFileInput(rl: readline.promises.Interface) {
     const path: string = await rl.question('Provide fullpath of file:\n')
 
-    const content: string = await getFileContentAsync(path)
+    const lines: string[] = await getFileContentAsync(path)
 
-    const tokens = tokenize(content)
+    const tokens = tokenizeFile(lines)
 
     return tokens
 }
