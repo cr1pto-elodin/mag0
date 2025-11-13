@@ -3,6 +3,8 @@ import { TokenTypeEnum } from "./tokens/enum/tokens.enum"
 import { Token } from "./tokens/model/token.model"
 
 const delimiters = /[A-Za-z_]+|\d+|[^\s]/g
+const identifierRegEx = /^[A-Za-z_]+$/
+const numberRegex = /^\d+$/
 
 export const tokenizeSingleLine = (content: string, line: number) => {
     const contentTokens = content.match(delimiters)
@@ -53,7 +55,7 @@ export const tokenizeSingleLine = (content: string, line: number) => {
             continue
         }
 
-        if (!isNaN(Number(contentToken))) {
+        if (numberRegex.test(contentToken)) {
             const token = new Token({
                 type: TokenTypeEnum.NUMBER,
                 value: contentToken,
@@ -64,6 +66,18 @@ export const tokenizeSingleLine = (content: string, line: number) => {
             tokens.push(token)
 
             continue
+        }
+
+        if (identifierRegEx.test(contentToken)) {
+            tokens.push(
+                new Token({
+                    type: TokenTypeEnum.IDENTIFIER,
+                    value: contentToken,
+                    line,
+                    column: index + 1,
+                })
+            );
+          continue;
         }
     }
 
