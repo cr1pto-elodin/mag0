@@ -21,6 +21,7 @@ export const tokenizeSingleLine = (content: string, line: number) => {
     for (let index = 0; index < contentTokens.length; index++) {
         const contentToken = contentTokens[index]!
 
+        //Strings
         if (contentToken === '"') {
             if (insideString) {
                 tokens.push(
@@ -45,7 +46,7 @@ export const tokenizeSingleLine = (content: string, line: number) => {
             continue
         }
 
-        //Multi char tokens
+        //Multi char operators
         const nextToken = contentTokens[index + 1]
         let combined = contentToken + (nextToken ?? '')
         if (combined in keyWords) {
@@ -61,6 +62,7 @@ export const tokenizeSingleLine = (content: string, line: number) => {
             continue
         }
 
+        //Single char operators and keywords
         if (contentToken in keyWords) {
             const token = new Token({
                 type: keyWords[contentToken],
@@ -73,6 +75,7 @@ export const tokenizeSingleLine = (content: string, line: number) => {
             continue
         }
 
+        //Numbers
         if (numberRegex.test(contentToken)) {
             const token = new Token({
                 type: TokenTypeEnum.NUMBER,
@@ -86,6 +89,7 @@ export const tokenizeSingleLine = (content: string, line: number) => {
             continue
         }
 
+        //Identifiers
         if (identifierRegEx.test(contentToken)) {
             tokens.push(
                 new Token({
