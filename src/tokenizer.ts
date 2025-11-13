@@ -18,7 +18,9 @@ export const tokenizeSingleLine = (content: string, line: number) => {
     let stringBuffer = '';
     let stringStartColumn = 0;
 
-    for (const [index, contentToken] of contentTokens.entries()) {
+    for (let index = 0; index < contentTokens.length; index++) {
+        const contentToken = contentTokens[index]!
+
         if (contentToken === '"') {
             if (insideString) {
                 tokens.push(
@@ -40,6 +42,22 @@ export const tokenizeSingleLine = (content: string, line: number) => {
 
         if (insideString) {
             stringBuffer += contentToken
+            continue
+        }
+
+        //Multi char tokens
+        const nextToken = contentTokens[index + 1]
+        let combined = contentToken + (nextToken ?? '')
+        if (combined in keyWords) {
+            tokens.push(
+                new Token({
+                    type: keyWords[combined],
+                    value: combined,
+                    line,
+                    column: index + 1,
+                })
+            )
+            index++
             continue
         }
 
