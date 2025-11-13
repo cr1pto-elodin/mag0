@@ -12,8 +12,35 @@ export const tokenizeSingleLine = (content: string, line: number) => {
     }
 
     const tokens: Token[] = []
+    let insideString = false;
+    let stringBuffer = '';
+    let stringStartColumn = 0;
 
     for (const [index, contentToken] of contentTokens.entries()) {
+        if (contentToken === '"') {
+            if (insideString) {
+                tokens.push(
+                    new Token({
+                    type: TokenTypeEnum.STRING,
+                    value: stringBuffer,
+                    line,
+                    column: stringStartColumn,
+                    })
+                )
+
+                stringBuffer = ''
+            } else {
+                stringStartColumn = index + 1
+            }
+            insideString = !insideString
+            continue
+        }
+
+        if (insideString) {
+            stringBuffer += contentToken
+            continue
+        }
+
         if (contentToken in keyWords) {
             const token = new Token({
                 type: keyWords[contentToken],
